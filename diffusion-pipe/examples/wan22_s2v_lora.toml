@@ -1,0 +1,53 @@
+# Wan2.2 S2V 14B LoRA training (audio + video)
+
+# CHANGE PATHS
+output_dir = '/Users/willi1/wan-modal/training_runs/wan22_s2v_lora'
+dataset = '/Users/willi1/wan-modal/diffusion-pipe/examples/wan22_s2v_dataset.toml'
+
+# Training
+epochs = 10
+micro_batch_size_per_gpu = 1
+pipeline_stages = 1
+gradient_accumulation_steps = 1
+gradient_clipping = 1.0
+warmup_steps = 100
+
+# Eval
+eval_every_n_epochs = 1
+eval_before_first_step = true
+eval_micro_batch_size_per_gpu = 1
+eval_gradient_accumulation_steps = 1
+
+# Misc
+save_every_n_epochs = 1
+checkpoint_every_n_minutes = 60
+activation_checkpointing = 'unsloth'
+partition_method = 'parameters'
+save_dtype = 'bfloat16'
+caching_batch_size = 1
+steps_per_print = 1
+video_clip_mode = 'single_beginning'
+blocks_to_swap = 32
+
+[model]
+type = 'wan_s2v'
+ckpt_path = '/Users/willi1/wan-modal/models/Wan2.2-S2V-14B'   # config+vae folder if available
+dtype = 'bfloat16'
+transformer_dtype = 'float8'
+# Optional single-file transformer if available for S2V
+# transformer_path = '/Users/willi1/wan-modal/Wan_2.2_ComfyUI_Repackaged/split_files/diffusion_models/wan2.2_s2v_14B_fp8_scaled.safetensors'
+timestep_sample_method = 'logit_normal'
+
+[adapter]
+type = 'lora'
+rank = 32
+dtype = 'bfloat16'
+
+[optimizer]
+type = 'AdamW8bitKahan'
+lr = 2e-5
+betas = [0.9, 0.99]
+weight_decay = 0.01
+stabilize = false
+
+

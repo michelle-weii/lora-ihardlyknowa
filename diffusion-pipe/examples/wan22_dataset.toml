@@ -1,0 +1,18 @@
+# Example dataset for Wan2.2 LoRA training
+
+# Train at ~512-equivalent area buckets. Adjust for your VRAM.
+resolutions = [512]
+enable_ar_bucket = true
+min_ar = 0.5
+max_ar = 2.0
+num_ar_buckets = 7
+
+# Video and image buckets. Keep 33 frames for video; images use 1
+frame_buckets = [1, 33]
+
+[[directory]]
+# CHANGE THIS: directory with .mp4/.mov/.png/.jpg and same-name .txt captions
+path = '/data/wan22_dataset'
+num_repeats = 1
+
+

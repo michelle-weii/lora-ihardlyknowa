@@ -1,0 +1,59 @@
+# Wan2.2 A14B (low-noise) LoRA training (text-to-video)
+
+# CHANGE THESE PATHS
+output_dir = '/data/wan22_a14b_low_lora'
+dataset = '/data/configs/wan22_dataset.toml'
+
+# Training
+epochs = 10
+micro_batch_size_per_gpu = 1
+pipeline_stages = 1
+gradient_accumulation_steps = 1
+gradient_clipping = 1.0
+warmup_steps = 100
+
+# Eval
+eval_every_n_epochs = 1
+eval_before_first_step = true
+eval_micro_batch_size_per_gpu = 1
+eval_gradient_accumulation_steps = 1
+
+# Misc
+save_every_n_epochs = 1
+checkpoint_every_n_minutes = 60
+activation_checkpointing = 'unsloth'
+partition_method = 'parameters'
+save_dtype = 'bfloat16'
+caching_batch_size = 1
+steps_per_print = 1
+video_clip_mode = 'single_beginning'
+# Swap 32 blocks to train on 24GB VRAM
+blocks_to_swap = 32
+
+[model]
+type = 'wan'
+# Path to Wan2.2 A14B checkpoint folder
+ckpt_path = '/models/Wan2.2-T2V-A14B'
+dtype = 'bfloat16'
+# Use fp8 for transformer to reduce VRAM
+transformer_dtype = 'float8'
+# For A14B, point to low noise subfolder or ComfyUI single-file path
+transformer_path = '/models/Wan2.2-T2V-A14B/low_noise_model'
+# Timestep range for low-noise model (see docs)
+min_t = 0.0
+max_t = 0.875
+timestep_sample_method = 'logit_normal'
+
+[adapter]
+type = 'lora'
+rank = 32
+dtype = 'bfloat16'
+
+[optimizer]
+type = 'AdamW8bitKahan'
+lr = 2e-5
+betas = [0.9, 0.99]
+weight_decay = 0.01
+stabilize = false
+
+

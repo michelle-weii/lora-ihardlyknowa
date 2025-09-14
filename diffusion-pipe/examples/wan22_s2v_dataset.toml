@@ -1,0 +1,14 @@
+# S2V dataset: add control_path for audio with matching filename stems
+resolutions = [512]
+enable_ar_bucket = true
+min_ar = 0.5
+max_ar = 2.0
+num_ar_buckets = 7
+frame_buckets = [33]
+
+[[directory]]
+path = '/data/wan22_s2v/videos'          # change to your videos
+control_path = '/data/wan22_s2v/audio'    # change to your audios (same stems)
+num_repeats = 1
+
+
